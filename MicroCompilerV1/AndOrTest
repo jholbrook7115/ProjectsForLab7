@@ -1,0 +1,12 @@
+program AndOrTest begin
+    write(1 > 2 ∧ 3 > 4);write('\n');
+    write(1 > 2 ∧ 3 < 4);write('\n');
+    write(1 < 2 ∧ 3 > 4);write('\n');
+    write(1 < 2 ∧ 3 < 4);write('\n');
+    write(1 > 2 ∨ 3 > 4);write('\n');
+    write(1 > 2 ∨ 3 < 4);write('\n');
+    write(1 < 2 ∨ 3 > 4);write('\n');
+    write(1 < 2 ∨ 3 < 4);write('\n');
+    write(1. > 2 ∧ 3 > 4.);write('\n');
+    write(1. > 2. ∧ 3. < 4.);write('\n');
+end;

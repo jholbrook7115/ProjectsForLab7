@@ -1,0 +1,19 @@
+program ArrayTest
+    int x[10];
+	procedure proc(int w[])
+		real y[10];
+		real z;
+		int i;
+		begin
+			x[5] := 9;
+			y[6] := 12;
+			z := x[5];
+			i := y[6];
+			x[6] := y[6];
+			y[5] := x[5];
+			w[1] := y[1];
+			x[9] := w[1];
+		end;
+    begin
+		call proc(x);
+    end;

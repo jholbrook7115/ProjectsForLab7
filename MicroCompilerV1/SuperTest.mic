@@ -1,0 +1,23 @@
+program SuperTest
+	int x[5];
+	int y;
+	real z;
+
+	int a[3];
+	int	b[4];
+	int c[4];
+
+	begin 
+		y:=x[0];
+		write(y);
+		write('\n');
+		z:=x[4];
+		write(z);
+
+		write('\n');
+
+		b:=c;
+		write(b);
+
+	end;
+
