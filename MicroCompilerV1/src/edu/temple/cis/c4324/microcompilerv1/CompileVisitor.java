@@ -10,6 +10,7 @@ import edu.temple.cis.c4324.micro.MicroParser.Assignment_statementContext;
 import edu.temple.cis.c4324.micro.MicroParser.BoolContext;
 import edu.temple.cis.c4324.micro.MicroParser.CharContext;
 import edu.temple.cis.c4324.micro.MicroParser.BodyContext;
+import edu.temple.cis.c4324.micro.MicroParser.Call_statementContext;
 import edu.temple.cis.c4324.micro.MicroParser.CompopContext;
 import edu.temple.cis.c4324.micro.MicroParser.Do_until_statementContext;
 import edu.temple.cis.c4324.micro.MicroParser.Else_partContext;
@@ -538,7 +539,18 @@ public class CompileVisitor extends MicroBaseVisitor<InstructionList> {
     @Override
     public InstructionList visitCall_statement(MicroParser.Call_statementContext ctx) {
         InstructionList il = cg.newInstructionList();
-        // INSERT CODE TO CALL THE PROCEDURE HERE
+        
+        ctx.expr_list().expr().forEach(argTypes->{
+            il.append(visit(argTypes));
+        });
+        Identifier fcnId = currentScope.resolve(ctx.ID().getText() );
+        ProcedureOrFunction fcnIdProc = (ProcedureOrFunction) fcnId.getType();
+        
+        String[] procedureInfo = fcnIdProc.getInvocationArgs();
+        
+        
+        il.addInstruction("invokestatic", procedureInfo);
+        //il.addInstruction("invokestatic", procedureInfo[0], procedureInfo[1], procedureInfo[2]);
         return il;
     }
 
@@ -616,5 +628,5 @@ public class CompileVisitor extends MicroBaseVisitor<InstructionList> {
         charArray[0] = Character.toUpperCase(charArray[0]);
         return new String(charArray);
     }
-
+    
 }

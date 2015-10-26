@@ -16,8 +16,7 @@ program SuperTest
 
 		write('\n');
 
-		b:=c;
-		write(b);
+		
 
 	end;
 
