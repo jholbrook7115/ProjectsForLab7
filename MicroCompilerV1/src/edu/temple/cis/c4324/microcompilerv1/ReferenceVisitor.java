@@ -9,6 +9,7 @@ import edu.temple.cis.c4324.micro.MicroParser.BoolContext;
 import edu.temple.cis.c4324.micro.MicroParser.CharContext;
 import edu.temple.cis.c4324.micro.MicroParser.CompopContext;
 import edu.temple.cis.c4324.micro.MicroParser.Elsif_partContext;
+import edu.temple.cis.c4324.micro.MicroParser.FcnCallContext;
 import edu.temple.cis.c4324.micro.MicroParser.FloatContext;
 import edu.temple.cis.c4324.micro.MicroParser.FunctionDeclarationContext;
 import edu.temple.cis.c4324.micro.MicroParser.IdContext;
@@ -156,7 +157,11 @@ public class ReferenceVisitor extends MicroBaseVisitor<Type> {
         if (guardType != BOOL) {
             error(ctx, "If statement guard is not a boolean type");
         }
+        visit(ctx.statement_list());
         ctx.elsif_part().forEach(elsif_part -> visit(elsif_part));
+        if (ctx.else_part() != null) {
+            visit(ctx.else_part());
+        }
         typeMap.put(ctx, VOID);
         return VOID;
     }
@@ -178,6 +183,7 @@ public class ReferenceVisitor extends MicroBaseVisitor<Type> {
         if (guardType != BOOL) {
             error(ctx, "If statement guard is not a boolean type");
         }
+        visit(ctx.statement_list());
         typeMap.put(ctx, VOID);
         return VOID;
     }
@@ -534,5 +540,23 @@ public class ReferenceVisitor extends MicroBaseVisitor<Type> {
         return lhsType;
     }
     
-
+    @Override
+    public Type visitFcnCall(FcnCallContext ctx){
+        ctx.expr_list().expr().forEach(expr -> visit(expr));
+        Identifier fcnId = currentScope.resolve(ctx.ID().getText());
+        if(fcnId != null){
+            Type fcnType = fcnId.getType();
+            if (fcnType instanceof ProcedureOrFunction){
+                Type returnType = ((ProcedureOrFunction)fcnType).getReturnType();
+                typeMap.put(ctx, returnType);
+                return returnType;
+            } else {
+                MicroCompilerV1.error(ctx, ctx.ID().getText() + " is not a function");
+            }       
+        } else {
+            MicroCompilerV1.error(ctx, ctx.ID().getText() + " is not defined");
+        }
+        typeMap.put(ctx, VOID);
+        return VOID;
+    }
 }

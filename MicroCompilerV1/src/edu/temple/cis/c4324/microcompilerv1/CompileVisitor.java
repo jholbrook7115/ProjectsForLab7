@@ -304,7 +304,14 @@ public class CompileVisitor extends MicroBaseVisitor<InstructionList> {
     @Override
     public InstructionList visitFcnCall(MicroParser.FcnCallContext ctx) {
         InstructionList il = cg.newInstructionList();
-        // INSERT CODE TO CALL FUNCTION AND LEAVE RESULT ON STACK HERE
+        
+        ctx.expr_list().expr().forEach(argTypes->{
+            il.append(visit(argTypes));
+        });
+        Identifier fcnId = currentScope.resolve(ctx.ID().getText() );
+        ProcedureOrFunction fcnIdProc = (ProcedureOrFunction) fcnId.getType();
+        String[] procedureInfo = fcnIdProc.getInvocationArgs();
+        il.addInstruction("invokestatic", procedureInfo);
         return il;
     }
 
@@ -545,12 +552,8 @@ public class CompileVisitor extends MicroBaseVisitor<InstructionList> {
         });
         Identifier fcnId = currentScope.resolve(ctx.ID().getText() );
         ProcedureOrFunction fcnIdProc = (ProcedureOrFunction) fcnId.getType();
-        
         String[] procedureInfo = fcnIdProc.getInvocationArgs();
-        
-        
         il.addInstruction("invokestatic", procedureInfo);
-        //il.addInstruction("invokestatic", procedureInfo[0], procedureInfo[1], procedureInfo[2]);
         return il;
     }
 
@@ -619,7 +622,9 @@ public class CompileVisitor extends MicroBaseVisitor<InstructionList> {
     @Override 
     public InstructionList visitReturn_statement(MicroParser.Return_statementContext ctx) { 
         InstructionList il = cg.newInstructionList();
-        // INSERT CODE TO GENERATE APPROPRIATE RETURN INSTRUCTION
+        Type whateverIWantToCallIt = typeMap.get(ctx.expr());
+        il.append(visit(ctx.expr()));
+        il.addInstruction("return", whateverIWantToCallIt.getJavaTypeName());
         return il;
     }
 

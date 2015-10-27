@@ -1,22 +1,25 @@
 program SuperTest
-	int x[5];
-	int y;
-	real z;
+    int x[10];
+    int a[2];
+	procedure proc(int w[]	)
+		real y[10];
+		real z;
+		int i;
+		begin
+			x[5] := 9;
+			y[6] := 12;
+			z := x[5];
+			i := y[6];
+			x[6] := y[6];
+			y[5] := x[5];
+			w[1] := y[1];
+			x[9] := w[1];
+			write(z);
+		end;
+    begin
+    write('S','u','p','e','r','T','e','s','t','!','!','!','!','!','!','!');
+		call proc(x, a);
 
-	int a[3];
-	int	b[4];
-	int c[4];
+    end;
 
-	begin 
-		y:=x[0];
-		write(y);
-		write('\n');
-		z:=x[4];
-		write(z);
-
-		write('\n');
-
-		
-
-	end;
 
